@@ -7,5 +7,7 @@ add_executable(programming_tech_lab1
         Base.h Base.cpp
         Fish.h Fish.cpp
         Bird.h Bird.cpp
+        Cat.h Cat.cpp
+        Keeper.h Keeper.cpp
         Main.cpp
 )

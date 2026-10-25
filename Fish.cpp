@@ -1,5 +1,7 @@
 #include "Fish.h"
 #include <cstring>
+#include <iostream>
+#include <stdexcept>
 
 void Fish::copyStrings(const char* b, const char* c, const char* f) {
     breed = new char[strlen(b) + 1];
@@ -16,13 +18,25 @@ void Fish::freeStrings() {
     delete[] feedType;
 }
 
-Fish::Fish() { copyStrings("Unknown", "Unknown", "Unknown"); }
+Fish::Fish() {
+    std::cout << "[Рыба] Вызван конструктор по умолчанию\n";
+    copyStrings("Unknown", "Unknown", "Unknown");
+}
 
-Fish::Fish(const char* b, const char* c, const char* f) { copyStrings(b, c, f); }
+Fish::Fish(const char* b, const char* c, const char* f) {
+    std::cout << "[Рыба] Вызван конструктор с параметрами\n";
+    copyStrings(b, c, f);
+}
 
-Fish::Fish(const Fish& other) : Base(other) { copyStrings(other.breed, other.color, other.feedType); }
+Fish::Fish(const Fish& other) : Base(other) {
+    std::cout << "[Рыба] Вызван конструктор копирования\n";
+    copyStrings(other.breed, other.color, other.feedType);
+}
 
-Fish::~Fish() { freeStrings(); }
+Fish::~Fish() {
+    std::cout << "[Рыба] Вызван деструктор\n";
+    freeStrings();
+}
 
 const char* Fish::getBreed() const { return breed; }
 void Fish::setBreed(const char* b) {

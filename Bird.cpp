@@ -1,5 +1,7 @@
 #include "Bird.h"
 #include <cstring>
+#include <iostream>
+#include <stdexcept>
 
 void Bird::copyStrings(const char* b, const char* c, const char* d, const char* h) {
     breed = new char[strlen(b) + 1]; strcpy(breed, b);
@@ -8,12 +10,29 @@ void Bird::copyStrings(const char* b, const char* c, const char* d, const char* 
     habitat = new char[strlen(h) + 1]; strcpy(habitat, h);
 }
 
-void Bird::freeStrings() { delete[] breed; delete[] color; delete[] diet; delete[] habitat; }
+void Bird::freeStrings() {
+    delete[] breed; delete[] color; delete[] diet; delete[] habitat;
+}
 
-Bird::Bird() { copyStrings("Unknown", "Unknown", "Unknown", "Unknown"); }
-Bird::Bird(const char* b, const char* c, const char* d, const char* h) { copyStrings(b, c, d, h); }
-Bird::Bird(const Bird& other) : Base(other) { copyStrings(other.breed, other.color, other.diet, other.habitat); }
-Bird::~Bird() { freeStrings(); }
+Bird::Bird() {
+    std::cout << "[Птица] Вызван конструктор по умолчанию\n";
+    copyStrings("Unknown", "Unknown", "Unknown", "Unknown");
+}
+
+Bird::Bird(const char* b, const char* c, const char* d, const char* h) {
+    std::cout << "[Птица] Вызван конструктор с параметрами\n";
+    copyStrings(b, c, d, h);
+}
+
+Bird::Bird(const Bird& other) : Base(other) {
+    std::cout << "[Птица] Вызван конструктор копирования\n";
+    copyStrings(other.breed, other.color, other.diet, other.habitat);
+}
+
+Bird::~Bird() {
+    std::cout << "[Птица] Вызван деструктор\n";
+    freeStrings();
+}
 
 const char* Bird::getBreed() const { return breed; }
 void Bird::setBreed(const char* b) { delete[] breed; breed = new char[strlen(b) + 1]; strcpy(breed, b); }
@@ -31,7 +50,7 @@ void Bird::display() const {
 void Bird::inputFromKeyboard() {
     char buf[256];
     std::cout << "Введите породу птицы: "; std::cin.getline(buf, sizeof(buf)); if(!strlen(buf)) throw std::invalid_argument("Пусто!"); setBreed(buf);
-    std::cout << "Введите окрас птицы: "; std::cin.getline(buf, sizeof(buf)); if(!strlen(buf)) throw std::invalid_argument("Пусто!"); setColor(buf);
+    std::cout << "Введите окрас: "; std::cin.getline(buf, sizeof(buf)); if(!strlen(buf)) throw std::invalid_argument("Пусто!"); setColor(buf);
     std::cout << "Введите диету: "; std::cin.getline(buf, sizeof(buf)); if(!strlen(buf)) throw std::invalid_argument("Пусто!"); setDiet(buf);
     std::cout << "Введите ареал: "; std::cin.getline(buf, sizeof(buf)); if(!strlen(buf)) throw std::invalid_argument("Пусто!"); setHabitat(buf);
 }

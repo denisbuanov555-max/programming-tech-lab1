@@ -1,5 +1,7 @@
 #include "Cat.h"
 #include <cstring>
+#include <iostream>
+#include <stdexcept>
 
 void Cat::copyStrings(const char* b, const char* c, const char* o, const char* n) {
     breed = new char[strlen(b) + 1]; strcpy(breed, b);
@@ -10,10 +12,25 @@ void Cat::copyStrings(const char* b, const char* c, const char* o, const char* n
 
 void Cat::freeStrings() { delete[] breed; delete[] color; delete[] ownerName; delete[] nickname; }
 
-Cat::Cat() { copyStrings("Unknown", "Unknown", "Unknown", "Unknown"); }
-Cat::Cat(const char* b, const char* c, const char* o, const char* n) { copyStrings(b, c, o, n); }
-Cat::Cat(const Cat& other) : Base(other) { copyStrings(other.breed, other.color, other.ownerName, other.nickname); }
-Cat::~Cat() { freeStrings(); }
+Cat::Cat() {
+    std::cout << "[Кошка] Вызван конструктор по умолчанию\n";
+    copyStrings("Unknown", "Unknown", "Unknown", "Unknown");
+}
+
+Cat::Cat(const char* b, const char* c, const char* o, const char* n) {
+    std::cout << "[Кошка] Вызван конструктор с параметрами\n";
+    copyStrings(b, c, o, n);
+}
+
+Cat::Cat(const Cat& other) : Base(other) {
+    std::cout << "[Кошка] Вызван конструктор копирования\n";
+    copyStrings(other.breed, other.color, other.ownerName, other.nickname);
+}
+
+Cat::~Cat() {
+    std::cout << "[Кошка] Вызван деструктор\n";
+    freeStrings();
+}
 
 const char* Cat::getBreed() const { return breed; }
 void Cat::setBreed(const char* b) { delete[] breed; breed = new char[strlen(b) + 1]; strcpy(breed, b); }

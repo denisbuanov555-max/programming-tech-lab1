@@ -1,9 +1,13 @@
 #include "Keeper.h"
 #include <cstring>
+#include <iostream>
 
-Keeper::Keeper() : items(nullptr), size(0), capacity(0) {}
+Keeper::Keeper() : items(nullptr), size(0), capacity(0) {
+    std::cout << "[Keeper] Вызван конструктор по умолчанию\n";
+}
 
 Keeper::Keeper(const Keeper& other) : size(other.size), capacity(other.capacity) {
+    std::cout << "[Keeper] Вызван конструктор копирования\n";
     if (capacity > 0) {
         items = new Base*[capacity];
         for (size_t i = 0; i < size; ++i) {
@@ -16,6 +20,7 @@ Keeper::Keeper(const Keeper& other) : size(other.size), capacity(other.capacity)
 }
 
 Keeper::~Keeper() {
+    std::cout << "[Keeper] Вызван деструктор\n";
     for (size_t i = 0; i < size; ++i) delete items[i];
     delete[] items;
 }
@@ -76,12 +81,17 @@ void Keeper::loadFromFile(const char* filename) {
 
     size_t count;
     if (!(in >> count)) return;
+
     char ignore[256];
     in.getline(ignore, sizeof(ignore));
 
     for (size_t i = 0; i < count; ++i) {
         char type[256];
+        while (in.peek() == '\n' || in.peek() == '\r') in.get();
         in.getline(type, sizeof(type));
+        size_t len = strlen(type);
+        if (len > 0 && type[len - 1] == '\r') type[len - 1] = '\0';
+
         Base* newItem = nullptr;
         if (strcmp(type, "Fish") == 0) newItem = new Fish();
         else if (strcmp(type, "Bird") == 0) newItem = new Bird();
